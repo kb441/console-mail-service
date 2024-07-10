@@ -1,6 +1,6 @@
 from commands.commands_list import handler
 
-print("Enter commands (type 'exit' to quit):")
+print("Введіть команди (введіть 'exit', щоб вийти):")
 while True:
     command_input = input("> ").strip()
     if command_input.lower() == 'exit':

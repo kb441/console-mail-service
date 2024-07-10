@@ -10,9 +10,9 @@ class CommandHandler:
             try:
                 self.commands[command_name](*args)
             except Exception as e:
-                print(f"Error executing command '{command_name}': {e}")
+                print(f"Помилка виконання команди '{command_name}': {e}")
         else:
-            print(f"Command '{command_name}' not recognized")
+            print(f"Команда '{command_name}' не розпізнається")
 
     def command(self, name):
         def decorator(func):
