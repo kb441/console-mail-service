@@ -1,10 +1,10 @@
 import json
 from datetime import datetime
 
-# Файл для хранения данных
+
 DATA_FILE = 'mail_system.json'
 
-# Инициализация базы данных
+
 def initialize_database():
     try:
         with open(DATA_FILE, 'x') as file:
@@ -72,9 +72,9 @@ class MailSystem:
             print("Message not found.")
             return
 
-        receiver = self.get_account_by_id(message['sender_id'])  # Получатель оригинального сообщения
+        receiver = self.get_account_by_id(message['sender_id'])
 
-        self.send_message(sender_email, receiver['email'], content)  # receiver['email'] это email получателя
+        self.send_message(sender_email, receiver['email'], content) 
 
     def get_account_info(self, email_or_id):
         if isinstance(email_or_id, int):
@@ -91,5 +91,5 @@ class MailSystem:
         print(f"Sent Messages: {account['sent_messages']}")
         print(f"Received Messages: {account['received_messages']}")
 
-# Инициализация базы данных
+
 initialize_database()
