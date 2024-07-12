@@ -63,3 +63,40 @@ def list_accounts():
 
 # Змінна для зберігання поточного користувача
 current_user = None
+
+
+# Функції для роботи з базою даних
+def save_message(sender, recipient, text, reply_to=None):
+    with open('database.json', 'r+') as file:
+        data = json.load(file)
+        message_id = len(data['messages']) + 1
+        data['messages'].append({
+            'id': message_id,
+            'sender': sender,
+            'recipient': recipient,
+            'text': text,
+            'reply_to': reply_to
+        })
+        file.seek(0)
+        json.dump(data, file, indent=4)
+        file.truncate()
+
+def get_message(message_id):
+    with open('database.json', 'r') as file:
+        data = json.load(file)
+        for message in data['messages']:
+            if message['id'] == message_id:
+                return message
+    return None
+
+def list_messages():
+    with open('database.json', 'r') as file:
+        data = json.load(file)
+        return data['messages']
+
+def get_user_stats(email):
+    with open('database.json', 'r') as file:
+        data = json.load(file)
+        sent = sum(1 for message in data['messages'] if message['sender'] == email)
+        received = sum(1 for message in data['messages'] if message['recipient'] == email)
+        return {'sent': sent, 'received': received}
