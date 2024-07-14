@@ -1,0 +1,30 @@
+{
+    "users": [
+        {
+            "name": "TestUser",
+            "email": "testuser@nonamecorp.com",
+            "password": "pass"
+        },
+        {
+            "name": "TestUser2",
+            "email": "testuser2@nonamecorp.com",
+            "password": "pass2"
+        }
+    ],
+    "mails": [
+        {
+            "id": 1,
+            "sender": "testuser@nonamecorp.com",
+            "receiver": "testuser2@nonamecorp.com",
+            "subject": "Лист1",
+            "content": "Текст."
+        },
+        {
+            "id": 2,
+            "sender": "testuser2@nonamecorp.com",
+            "receiver": "testuser@nonamecorp.com",
+            "subject": "Лист2",
+            "content": "Текст."
+        }
+    ]
+}
