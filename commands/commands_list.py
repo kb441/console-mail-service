@@ -1,20 +1,10 @@
 from commands.handler import CommandHandler
-from database import initialize_database, get_user_by_email, add_user, delete_user, list_users, save_message, get_message, get_user_stats, list_incoming_emails, list_outgoing_emails, get_email_by_id
-
-# Ініціалізація бази даних
-initialize_database()
+from database import get_user_by_email, add_user, delete_user, list_users, save_message, get_message, get_user_stats, list_incoming_emails, list_outgoing_emails, get_email_by_id
 
 handler = CommandHandler()
 
-# Змінна для зберігання поточного користувача
-current_user = None
-
 @handler.command('register')
 def register(name, email, password, password_confirm):
-    global current_user
-    if current_user:
-        print("Ви вже увійшли в систему")
-        return
     if password != password_confirm:
         print("Паролі не збігаються")
         return
@@ -52,22 +42,17 @@ def logout():
 @handler.command('delete_account')
 def delete_account(email):
     global current_user
-    if not current_user:
-        print("Ви не увійшли в систему")
-        return
     user = get_user_by_email(email)
     if not user:
         print("Користувача з такою електронною поштою не знайдено")
-        return
-    if current_user['email'] != email:
-        print("Ви можете видалити тільки свій аккаунт")
         return
     confirmation = input(f"Ви впевнені, що хочете видалити аккаунт {user['name']}? (так/ні): ")
     if confirmation.lower() != 'так':
         print("Видалення відмінено")
         return
     delete_user(email)
-    current_user = None
+    if current_user and current_user['email'] == email:
+        current_user = None
     print("Аккаунт успішно видалено")
 
 @handler.command('list_accounts')
@@ -79,8 +64,10 @@ def list_accounts():
     for i, user in enumerate(users, start=1):
         print(f"{i}. {user['name']} - {user['email']}")
 
+current_user = None
+
 @handler.command('send_email')
-def send_email(recipient_email, text):
+def send_email(recipient_email, *args):
     global current_user
     if not current_user:
         print("Ви не увійшли в систему")
@@ -89,11 +76,12 @@ def send_email(recipient_email, text):
     if not recipient:
         print("Отримувача не знайдено")
         return
+    text = ' '.join(args)
     save_message(current_user['email'], recipient_email, text)
     print("Лист успішно відправлено")
 
 @handler.command('reply_email')
-def reply_email(message_id, text):
+def reply_email(message_id, *args):
     global current_user
     if not current_user:
         print("Спочатку увійдіть в систему")
@@ -102,6 +90,7 @@ def reply_email(message_id, text):
     if not original_message or original_message['receiver'] != current_user['email']:
         print("Повідомлення не знайдено або ви не є отримувачем")
         return
+    text = ' '.join(args)
     save_message(current_user['email'], original_message['sender'], text, reply_to=message_id)
     print("Відповідь успішно відправлено")
 
@@ -122,12 +111,12 @@ def list_inbox():
     if not current_user:
         print("Спочатку увійдіть в систему")
         return
-    emails = list_incoming_emails(current_user['email'])
-    if not emails:
+    mails = list_incoming_emails(current_user['email'])
+    if not mails:
         print("У вас немає вхідних листів")
         return
-    for email in emails:
-        print(f"ID: {email['id']}, Від: {email['sender']}, Зміст: {email['text']}")
+    for mail in mails:
+        print(f"ID: {mail['id']}, Від: {mail['sender']}, Текст: {mail['text']}")
 
 @handler.command('list_outbox')
 def list_outbox():
@@ -135,21 +124,22 @@ def list_outbox():
     if not current_user:
         print("Спочатку увійдіть в систему")
         return
-    emails = list_outgoing_emails(current_user['email'])
-    if not emails:
+    mails = list_outgoing_emails(current_user['email'])
+    if not mails:
         print("У вас немає вихідних листів")
         return
-    for email in emails:
-        print(f"ID: {email['id']}, Кому: {email['receiver']}, Зміст: {email['text']}")
+    for mail in mails:
+        print(f"ID: {mail['id']}, Кому: {mail['receiver']}, Текст: {mail['text']}")
 
 @handler.command('read_email')
-def read_email(email_id):
+def read_email(mail_id):
     global current_user
     if not current_user:
         print("Спочатку увійдіть в систему")
         return
-    email = get_email_by_id(current_user['email'], int(email_id))
-    if not email:
+    mail = get_email_by_id(current_user['email'], int(mail_id))
+    if not mail:
         print("Лист не знайдено або у вас немає доступу до цього листа")
         return
-    print(f"ID: {email['id']}, Від: {email['sender']}, Кому: {email['receiver']}, Зміст: {email['text']}")
+    print(f"ID: {mail['id']}, Від: {mail['sender']}, Кому: {mail['receiver']}")
+    print(f"Текст: {mail['text']}")

@@ -1,0 +1,23 @@
+{
+    "users": [
+        {
+            "name": "User1",
+            "email": "user1@example.com",
+            "password": "password123"
+        },
+        {
+            "name": "User2",
+            "email": "user2@example.com",
+            "password": "password456"
+        }
+    ],
+    "messages": [
+        {
+            "id": 1,
+            "sender": "user1@example.com",
+            "receiver": "user2@example.com",
+            "text": "Привіт! Як справи?",
+            "reply_to": null
+        }
+    ]
+}

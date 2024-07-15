@@ -5,15 +5,12 @@ DATABASE_FILE = 'database.json'
 
 def initialize_database():
     if not os.path.exists(DATABASE_FILE):
-        data = {
-            "users": [],
-            "emails": []
-        }
-        write_database(data)
+        with open(DATABASE_FILE, 'w', encoding='utf-8') as f:
+            json.dump({"users": [], "messages": []}, f, indent=4, ensure_ascii=False)
 
 def read_database():
     if not os.path.exists(DATABASE_FILE):
-        return {"users": [], "emails": []}
+        return {"users": [], "messages": []}
     with open(DATABASE_FILE, 'r', encoding='utf-8') as f:
         return json.load(f)
 
@@ -43,9 +40,9 @@ def list_users():
 
 def save_message(sender, receiver, text, reply_to=None):
     data = read_database()
-    email_id = len(data['emails']) + 1
-    data['emails'].append({
-        'id': email_id,
+    message_id = len(data['messages']) + 1
+    data['messages'].append({
+        'id': message_id,
         'sender': sender,
         'receiver': receiver,
         'text': text,
@@ -55,28 +52,31 @@ def save_message(sender, receiver, text, reply_to=None):
 
 def get_message(message_id):
     data = read_database()
-    for email in data['emails']:
-        if email['id'] == message_id:
-            return email
+    for message in data['messages']:
+        if message['id'] == message_id:
+            return message
     return None
+
+def list_messages():
+    return read_database()['messages']
 
 def get_user_stats(email):
     data = read_database()
-    sent = sum(1 for email in data['emails'] if email['sender'] == email)
-    received = sum(1 for email in data['emails'] if email['receiver'] == email)
+    sent = sum(1 for message in data['messages'] if message['sender'] == email)
+    received = sum(1 for message in data['messages'] if message['receiver'] == email)
     return {'sent': sent, 'received': received}
 
 def list_incoming_emails(email):
     data = read_database()
-    return [email for email in data['emails'] if email['receiver'] == email]
+    return [mail for mail in data['messages'] if mail['receiver'] == email]
 
 def list_outgoing_emails(email):
     data = read_database()
-    return [email for email in data['emails'] if email['sender'] == email]
+    return [mail for mail in data['messages'] if mail['sender'] == email]
 
-def get_email_by_id(email, email_id):
+def get_email_by_id(email, mail_id):
     data = read_database()
-    for email in data['emails']:
-        if email['id'] == email_id and (email['sender'] == email or email['receiver'] == email):
-            return email
+    for mail in data['messages']:
+        if mail['id'] == mail_id and (mail['sender'] == email or mail['receiver'] == email):
+            return mail
     return None
