@@ -87,12 +87,16 @@ def reply_email(message_id, *args):
         print("Спочатку увійдіть в систему")
         return
     original_message = get_message(message_id)
-    if not original_message or original_message['receiver'] != current_user['email']:
-        print("Повідомлення не знайдено або ви не є отримувачем")
+    if not original_message:
+        print("Повідомлення не знайдено")
+        return
+    if original_message['receiver'] != current_user['email']:
+        print("Ви не є отримувачем цього повідомлення")
         return
     text = ' '.join(args)
     save_message(current_user['email'], original_message['sender'], text, reply_to=message_id)
     print("Відповідь успішно відправлено")
+
 
 @handler.command('account_info')
 def account_info(identifier):

@@ -53,7 +53,7 @@ def save_message(sender, receiver, text, reply_to=None):
 def get_message(message_id):
     data = read_database()
     for message in data['messages']:
-        if message['id'] == message_id:
+        if message['id'] == int(message_id):
             return message
     return None
 

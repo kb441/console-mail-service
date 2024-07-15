@@ -1,11 +1,6 @@
 {
     "users": [
         {
-            "name": "User1",
-            "email": "user1@example.com",
-            "password": "password123"
-        },
-        {
             "name": "User2",
             "email": "user2@example.com",
             "password": "password456"
@@ -18,6 +13,13 @@
             "receiver": "user2@example.com",
             "text": "Привіт! Як справи?",
             "reply_to": null
+        },
+        {
+            "id": 2,
+            "sender": "user2@example.com",
+            "receiver": "user1@example.com",
+            "text": "Дякую, все добре!",
+            "reply_to": "1"
         }
     ]
 }
