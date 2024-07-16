@@ -1,5 +1,6 @@
 <h1>Колективна робота на тему "Сервіс пошти"</h1>
 <a href="https://nubip-my.sharepoint.com/:p:/g/personal/kn23-k_bohatyrenko_it_nubip_edu_ua/EWnN2gqqpIZEpq8rKLlORWoBsFEOqNHd_Vb6qUOyni5qPw?e=LCcfGG">Презентація проєкту</a>
+<br><br>
 <a href="https://drive.google.com/file/d/1jQbBxU5i5nTOdmKuLJ_RkVrIz2a3h4V7/view?usp=sharing​">Відео-захист проєкту</a>
 <h2>Технології</h2>
 <ul>
